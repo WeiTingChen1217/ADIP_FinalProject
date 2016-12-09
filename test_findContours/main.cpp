@@ -5,6 +5,9 @@
 //  Created by WeiTingChen on 12/9/16.
 //  Copyright © 2016 WeiTingChen. All rights reserved.
 //
+//  Reference : http://monkeycoding.com/?p=622
+//
+
 
 #include <iostream>
 #include <opencv2/opencv.hpp>
