@@ -1,4 +1,4 @@
-將圖片`coins_512x512.raw`的雜訊去除*執行*`Morphology_2.cpp`及黑色圓點去除*執行*`Morphology_2-2.cpp`
+將圖片`coins_512x512.raw`的雜訊去除 *執行* `Morphology_2.cpp`及黑色圓點去除 *執行* `Morphology_2-2.cpp`
 
 ### Morphology_2.cpp
 **Parameters**
