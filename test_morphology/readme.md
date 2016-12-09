@@ -7,7 +7,8 @@
 - **Element** - 0
 - **Kernel size** - 4
 
-結果![圖片](/output/test_morphology/coins_512x512_1.jpg)
+結果
+![圖片](/output/test_morphology/coins_512x512_1.jpg)
 
 ### Morphology_2-2.cpp
 
@@ -16,4 +17,5 @@
 - **Element** - 0
 - **Kernel size** - 11
 
-結果![圖片](/output/test_morphology/coins_512x512_2.jpg)
+結果
+![圖片](/output/test_morphology/coins_512x512_2.jpg)
