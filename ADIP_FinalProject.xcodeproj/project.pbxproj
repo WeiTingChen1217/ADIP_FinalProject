@@ -11,7 +11,7 @@
 		A88D176C1DF94AD5001635B4 /* OpenRawFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A88D176A1DF94AD5001635B4 /* OpenRawFile.cpp */; };
 		A88D17751DF96143001635B4 /* Morphology_2-3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A88D17741DF96143001635B4 /* Morphology_2-3.cpp */; };
 		A8D534661DFA642F001D137D /* Threshold.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8D534651DFA642F001D137D /* Threshold.cpp */; };
-		A8D534741DFA864F001D137D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8D5346D1DFA7012001D137D /* main.cpp */; };
+		A8D534741DFA864F001D137D /* test_findContours.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8D5346D1DFA7012001D137D /* test_findContours.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -123,8 +123,7 @@
 		A8D534601DFA639C001D137D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A8D534651DFA642F001D137D /* Threshold.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Threshold.cpp; sourceTree = "<group>"; };
 		A8D5346B1DFA7012001D137D /* test_findContours */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test_findContours; sourceTree = BUILT_PRODUCTS_DIR; };
-		A8D5346D1DFA7012001D137D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		A8D534721DFA7041001D137D /* segment_objects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = segment_objects.cpp; sourceTree = "<group>"; };
+		A8D5346D1DFA7012001D137D /* test_findContours.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_findContours.cpp; sourceTree = "<group>"; };
 		A8D534751DFA8DD0001D137D /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -353,8 +352,7 @@
 		A8D5346C1DFA7012001D137D /* test_findContours */ = {
 			isa = PBXGroup;
 			children = (
-				A8D534721DFA7041001D137D /* segment_objects.cpp */,
-				A8D5346D1DFA7012001D137D /* main.cpp */,
+				A8D5346D1DFA7012001D137D /* test_findContours.cpp */,
 			);
 			path = test_findContours;
 			sourceTree = "<group>";
@@ -503,7 +501,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8D534741DFA864F001D137D /* main.cpp in Sources */,
+				A8D534741DFA864F001D137D /* test_findContours.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -722,6 +720,7 @@
 				A8D534641DFA639C001D137D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A8D5346F1DFA7012001D137D /* Build configuration list for PBXNativeTarget "test_findContours" */ = {
 			isa = XCConfigurationList;
@@ -730,6 +729,7 @@
 				A8D534711DFA7012001D137D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
