@@ -1,4 +1,4 @@
-先執行`Morphology_2.cpp`而後執行`Morphology_2-2.cpp`
+將圖片`coins_512x512.raw`的雜訊去除**執行**`Morphology_2.cpp`及黑色圓點去除**執行**`Morphology_2-2.cpp`
 
 #### Morphology_2.cpp
 **Parameters**
@@ -6,8 +6,12 @@
 - **Element** - 0
 - **Kernel size** - 4
 
+結果[圖片](/output/test_morphology/coins_512x512_1.jpg)
+
 #### Morphology_2-2.cpp
 **Parameters**
 - **Operator** - 1
 - **Element** - 0
 - **Kernel size** - 11
+
+結果[圖片](/output/test_morphology/coins_512x512_2.jpg)

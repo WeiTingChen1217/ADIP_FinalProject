@@ -9,10 +9,20 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>test_findContours.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
 		<key>test_morphology.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>
+		</dict>
+		<key>test_threshold.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -23,6 +33,16 @@
 			<true/>
 		</dict>
 		<key>A88D175C1DF93A4A001635B4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A8D5345D1DFA639C001D137D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A8D5346A1DFA7012001D137D</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -6,8 +6,8 @@
 //  Copyright © 2016 WeiTingChen. All rights reserved.
 //
 
-#include "OpenRawFile.hpp"
-
+#include <stdio.h>
+#include <opencv2/opencv.hpp>
 
 using namespace cv;
 
@@ -32,37 +32,58 @@ void Morphology_Operations( int, void* );
  */
 int main( int, char** argv )
 {
-    char str_input_image_1[] = "/Users/WeiTing_Chen/Google 雲端硬碟/「碩二上課程」/高等數位影像/Final project/ADIP final project/ADIP_Final/nolight_lv1/IMG_2335.JPG";
+    char str_input_image_1[] = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/output/test_morphology/IMG_2335_1_0_04.jpg";
     
     /// Load an image
     src = imread( str_input_image_1, IMREAD_GRAYSCALE );
+//    Size size(src.cols/4,src.rows/4);
+    Size size(src.cols,src.rows);
+    resize(src, src, size);
+    
     
     if( src.empty() )
     { return -1; }
     
     /// Create window
-    namedWindow( window_name, WINDOW_AUTOSIZE);
+    namedWindow(window_name, WINDOW_NORMAL);
     
     /// Create Trackbar to select Morphology operation
     createTrackbar("Operator:\n 0: Opening - 1: Closing  \n 2: Gradient - 3: Top Hat \n 4: Black Hat", window_name, &morph_operator, max_operator, Morphology_Operations );
     
     /// Create Trackbar to select kernel type
-    createTrackbar( "Element:\n 0: Rect - 1: Cross - 2: Ellipse", window_name,
-                   &morph_elem, max_elem,
-                   Morphology_Operations );
+    createTrackbar( "Element:\n 0: Rect - 1: Cross - 2: Ellipse", window_name,&morph_elem, max_elem,Morphology_Operations );
     
     /// Create Trackbar to choose kernel size
     createTrackbar( "Kernel size:\n 2n +1", window_name,
-                   &morph_size, max_kernel_size,
-                   Morphology_Operations );
+        &morph_size, max_kernel_size,Morphology_Operations );
     
     /// Default start
     Morphology_Operations( 0, 0 );
     
     waitKey(0);
     
+    // Define save file name
+    char str_save_name[100];
+    char str_do_number[30];
+    strcpy(str_save_name,
+           "../../output/test_morphology/IMG_2335-2");
+    
+    sprintf(str_do_number, "_%d", morph_operator);
+    strcat(str_save_name, str_do_number);
+    sprintf(str_do_number, "_%d", morph_elem);
+    strcat(str_save_name, str_do_number);
+    if (morph_size < 10) {
+        sprintf(str_do_number, "_0%d", morph_size);
+        strcat(str_save_name, str_do_number);
+    }else{
+        sprintf(str_do_number, "_%d", morph_size);
+        strcat(str_save_name, str_do_number);
+    }
+    strcat(str_save_name, ".jpg");
+    puts(str_save_name);
+    
     // Save image
-//    imwrite("../../output/test_morphology/coins_512x512_2.jpg", dst);
+    imwrite(str_save_name, dst);
     
     return 0;
 }
