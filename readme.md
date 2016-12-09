@@ -8,7 +8,7 @@
 <a name="IMG_2335.JPG"></a> 
 ### 圖片 IMG_2335.JPG
 
-[圖片1](/Users/WeiTing_Chen/Google 雲端硬碟/「碩二上課程」/高等數位影像/Final project/ADIP final project/ADIP_Final/nolight_lv1/IMG_2335.JPG)
+[圖片1](/doc/ADIP_Final/nolight_lv1/IMG_2335.JPG)
 
 處理順序:
 
