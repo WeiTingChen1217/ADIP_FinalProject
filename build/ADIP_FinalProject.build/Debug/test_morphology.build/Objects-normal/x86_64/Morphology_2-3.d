@@ -1,6 +1,5 @@
 dependencies: \
   /Users/WeiTing_Chen/Desktop/ADIP_FinalProject/test_morphology/Morphology_2-3.cpp \
-  /Users/WeiTing_Chen/Desktop/ADIP_FinalProject/include/OpenRawFile.hpp \
   /usr/local/opt/opencv3/include/opencv2/opencv.hpp \
   /usr/local/opt/opencv3/include/opencv2/core.hpp \
   /usr/local/opt/opencv3/include/opencv2/core/cvdef.h \

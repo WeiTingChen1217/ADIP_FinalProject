@@ -32,7 +32,7 @@ void Morphology_Operations( int, void* );
  */
 int main( int, char** argv )
 {
-    char str_input_image_1[] = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/output/test_morphology/IMG_2335_1_0_04.jpg";
+    char str_input_image_1[] = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/output/test_morphology/IMG_2367-1_0_0_10.jpg";
     
     /// Load an image
     src = imread( str_input_image_1, IMREAD_GRAYSCALE );
@@ -61,30 +61,30 @@ int main( int, char** argv )
     Morphology_Operations( 0, 0 );
     
     waitKey(0);
-    
-    // Define save file name
-    char str_save_name[100];
-    char str_do_number[30];
-    strcpy(str_save_name,
-           "../../output/test_morphology/IMG_2335-2");
-    
-    sprintf(str_do_number, "_%d", morph_operator);
-    strcat(str_save_name, str_do_number);
-    sprintf(str_do_number, "_%d", morph_elem);
-    strcat(str_save_name, str_do_number);
-    if (morph_size < 10) {
-        sprintf(str_do_number, "_0%d", morph_size);
+    {
+        // Define save file name
+        char str_save_name[100];
+        char str_do_number[30];
+        strcpy(str_save_name,
+               "../../output/test_morphology/IMG_2367-2");
+        
+        sprintf(str_do_number, "_%d", morph_operator);
         strcat(str_save_name, str_do_number);
-    }else{
-        sprintf(str_do_number, "_%d", morph_size);
+        sprintf(str_do_number, "_%d", morph_elem);
         strcat(str_save_name, str_do_number);
+        if (morph_size < 10) {
+            sprintf(str_do_number, "_0%d", morph_size);
+            strcat(str_save_name, str_do_number);
+        }else{
+            sprintf(str_do_number, "_%d", morph_size);
+            strcat(str_save_name, str_do_number);
+        }
+        strcat(str_save_name, ".jpg");
+        puts(str_save_name);
+        
+        // Save image
+        imwrite(str_save_name, dst);
     }
-    strcat(str_save_name, ".jpg");
-    puts(str_save_name);
-    
-    // Save image
-    imwrite(str_save_name, dst);
-    
     return 0;
 }
 

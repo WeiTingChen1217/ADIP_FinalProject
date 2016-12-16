@@ -12,12 +12,12 @@
 
 處理順序:
 
->1. 需修改`Morphology_2-3.cpp`
+>1 需修改`Morphology_2-3.cpp`
 >先做 Opening 在做 Closing 係數如檔名
 
 >>Ex: IMG_2335-1_1_0_04.jpg(圖片名稱-處理次數_Operator_Element_Kernel size)
 
->2. 執行`test_findContours.cpp`
+>2 執行`test_findContours.cpp`
 >使用 Canny 找出邊界
 
 >>**Parameters**

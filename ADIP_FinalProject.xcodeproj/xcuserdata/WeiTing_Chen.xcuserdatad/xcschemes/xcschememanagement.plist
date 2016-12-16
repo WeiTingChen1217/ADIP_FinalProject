@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>test_HoughLineTransform.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 		<key>test_findContours.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -27,6 +32,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>A802F68A1E0398AF00E7320D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>A88D174D1DF93786001635B4</key>
 		<dict>
 			<key>primary</key>

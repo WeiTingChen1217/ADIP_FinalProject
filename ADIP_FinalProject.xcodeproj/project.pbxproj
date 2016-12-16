@@ -7,14 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A802F68E1E0398AF00E7320D /* HoughLines_Demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A802F68D1E0398AF00E7320D /* HoughLines_Demo.cpp */; };
 		A88D17521DF93786001635B4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A88D17511DF93786001635B4 /* main.cpp */; };
 		A88D176C1DF94AD5001635B4 /* OpenRawFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A88D176A1DF94AD5001635B4 /* OpenRawFile.cpp */; };
 		A88D17751DF96143001635B4 /* Morphology_2-3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A88D17741DF96143001635B4 /* Morphology_2-3.cpp */; };
-		A8D534661DFA642F001D137D /* Threshold.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8D534651DFA642F001D137D /* Threshold.cpp */; };
 		A8D534741DFA864F001D137D /* test_findContours.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8D5346D1DFA7012001D137D /* test_findContours.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		A802F6891E0398AF00E7320D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		A88D174C1DF93786001635B4 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -25,15 +34,6 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		A88D175B1DF93A4A001635B4 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-		A8D5345C1DFA639C001D137D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -54,6 +54,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A802F68B1E0398AF00E7320D /* test_HoughLineTransform */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test_HoughLineTransform; sourceTree = BUILT_PRODUCTS_DIR; };
+		A802F68D1E0398AF00E7320D /* HoughLines_Demo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HoughLines_Demo.cpp; sourceTree = "<group>"; };
 		A88D174E1DF93786001635B4 /* ADIP_FinalProject */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ADIP_FinalProject; sourceTree = BUILT_PRODUCTS_DIR; };
 		A88D17511DF93786001635B4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A88D175D1DF93A4A001635B4 /* test_morphology */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test_morphology; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,9 +68,6 @@
 		A8D5341B1DFA5E39001D137D /* bike_900x672.raw */ = {isa = PBXFileReference; lastKnownFileType = text; path = bike_900x672.raw; sourceTree = "<group>"; };
 		A8D5341C1DFA5E39001D137D /* calculator_360x240.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = calculator_360x240.raw; sourceTree = "<group>"; };
 		A8D5341D1DFA5E39001D137D /* coins_512x512.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = coins_512x512.raw; sourceTree = "<group>"; };
-		A8D5345E1DFA639C001D137D /* test_threshold */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test_threshold; sourceTree = BUILT_PRODUCTS_DIR; };
-		A8D534601DFA639C001D137D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		A8D534651DFA642F001D137D /* Threshold.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Threshold.cpp; sourceTree = "<group>"; };
 		A8D5346B1DFA7012001D137D /* test_findContours */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test_findContours; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8D5346D1DFA7012001D137D /* test_findContours.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_findContours.cpp; sourceTree = "<group>"; };
 		A8D534751DFA8DD0001D137D /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
@@ -128,6 +127,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A802F6881E0398AF00E7320D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A88D174B1DF93786001635B4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -136,13 +142,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A88D175A1DF93A4A001635B4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A8D5345B1DFA639C001D137D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -159,6 +158,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A802F68C1E0398AF00E7320D /* test_HoughLineTransform */ = {
+			isa = PBXGroup;
+			children = (
+				A802F68D1E0398AF00E7320D /* HoughLines_Demo.cpp */,
+			);
+			path = test_HoughLineTransform;
+			sourceTree = "<group>";
+		};
 		A88D17451DF93786001635B4 = {
 			isa = PBXGroup;
 			children = (
@@ -167,8 +174,8 @@
 				A88D17661DF944AC001635B4 /* include */,
 				A88D17501DF93786001635B4 /* ADIP_FinalProject */,
 				A88D175E1DF93A4A001635B4 /* test_morphology */,
-				A8D5345F1DFA639C001D137D /* test_threshold */,
 				A8D5346C1DFA7012001D137D /* test_findContours */,
+				A802F68C1E0398AF00E7320D /* test_HoughLineTransform */,
 				A88D174F1DF93786001635B4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -178,8 +185,8 @@
 			children = (
 				A88D174E1DF93786001635B4 /* ADIP_FinalProject */,
 				A88D175D1DF93A4A001635B4 /* test_morphology */,
-				A8D5345E1DFA639C001D137D /* test_threshold */,
 				A8D5346B1DFA7012001D137D /* test_findContours */,
+				A802F68B1E0398AF00E7320D /* test_HoughLineTransform */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -229,15 +236,6 @@
 				A8D5341D1DFA5E39001D137D /* coins_512x512.raw */,
 			);
 			path = test_morphology;
-			sourceTree = "<group>";
-		};
-		A8D5345F1DFA639C001D137D /* test_threshold */ = {
-			isa = PBXGroup;
-			children = (
-				A8D534651DFA642F001D137D /* Threshold.cpp */,
-				A8D534601DFA639C001D137D /* main.cpp */,
-			);
-			path = test_threshold;
 			sourceTree = "<group>";
 		};
 		A8D5346C1DFA7012001D137D /* test_findContours */ = {
@@ -359,6 +357,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		A802F68A1E0398AF00E7320D /* test_HoughLineTransform */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A802F68F1E0398AF00E7320D /* Build configuration list for PBXNativeTarget "test_HoughLineTransform" */;
+			buildPhases = (
+				A802F6871E0398AF00E7320D /* Sources */,
+				A802F6881E0398AF00E7320D /* Frameworks */,
+				A802F6891E0398AF00E7320D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = test_HoughLineTransform;
+			productName = test_HoughLineTransform;
+			productReference = A802F68B1E0398AF00E7320D /* test_HoughLineTransform */;
+			productType = "com.apple.product-type.tool";
+		};
 		A88D174D1DF93786001635B4 /* ADIP_FinalProject */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A88D17551DF93786001635B4 /* Build configuration list for PBXNativeTarget "ADIP_FinalProject" */;
@@ -393,23 +408,6 @@
 			productReference = A88D175D1DF93A4A001635B4 /* test_morphology */;
 			productType = "com.apple.product-type.tool";
 		};
-		A8D5345D1DFA639C001D137D /* test_threshold */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A8D534621DFA639C001D137D /* Build configuration list for PBXNativeTarget "test_threshold" */;
-			buildPhases = (
-				A8D5345A1DFA639C001D137D /* Sources */,
-				A8D5345B1DFA639C001D137D /* Frameworks */,
-				A8D5345C1DFA639C001D137D /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = test_threshold;
-			productName = test_threshold;
-			productReference = A8D5345E1DFA639C001D137D /* test_threshold */;
-			productType = "com.apple.product-type.tool";
-		};
 		A8D5346A1DFA7012001D137D /* test_findContours */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A8D5346F1DFA7012001D137D /* Build configuration list for PBXNativeTarget "test_findContours" */;
@@ -436,13 +434,13 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = WeiTingChen;
 				TargetAttributes = {
+					A802F68A1E0398AF00E7320D = {
+						CreatedOnToolsVersion = 7.2;
+					};
 					A88D174D1DF93786001635B4 = {
 						CreatedOnToolsVersion = 7.2;
 					};
 					A88D175C1DF93A4A001635B4 = {
-						CreatedOnToolsVersion = 7.2;
-					};
-					A8D5345D1DFA639C001D137D = {
 						CreatedOnToolsVersion = 7.2;
 					};
 					A8D5346A1DFA7012001D137D = {
@@ -464,13 +462,21 @@
 			targets = (
 				A88D174D1DF93786001635B4 /* ADIP_FinalProject */,
 				A88D175C1DF93A4A001635B4 /* test_morphology */,
-				A8D5345D1DFA639C001D137D /* test_threshold */,
 				A8D5346A1DFA7012001D137D /* test_findContours */,
+				A802F68A1E0398AF00E7320D /* test_HoughLineTransform */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		A802F6871E0398AF00E7320D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A802F68E1E0398AF00E7320D /* HoughLines_Demo.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A88D174A1DF93786001635B4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -488,14 +494,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A8D5345A1DFA639C001D137D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A8D534661DFA642F001D137D /* Threshold.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A8D534671DFA7012001D137D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -507,6 +505,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		A802F6901E0398AF00E7320D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A802F6911E0398AF00E7320D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		A88D17531DF93786001635B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -654,20 +666,6 @@
 			};
 			name = Release;
 		};
-		A8D534631DFA639C001D137D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		A8D534641DFA639C001D137D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		A8D534701DFA7012001D137D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -685,6 +683,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A802F68F1E0398AF00E7320D /* Build configuration list for PBXNativeTarget "test_HoughLineTransform" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A802F6901E0398AF00E7320D /* Debug */,
+				A802F6911E0398AF00E7320D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		A88D17491DF93786001635B4 /* Build configuration list for PBXProject "ADIP_FinalProject" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -708,15 +714,6 @@
 			buildConfigurations = (
 				A88D17621DF93A4A001635B4 /* Debug */,
 				A88D17631DF93A4A001635B4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A8D534621DFA639C001D137D /* Build configuration list for PBXNativeTarget "test_threshold" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A8D534631DFA639C001D137D /* Debug */,
-				A8D534641DFA639C001D137D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

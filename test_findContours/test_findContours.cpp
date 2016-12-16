@@ -8,6 +8,8 @@
 //  Reference : http://monkeycoding.com/?p=622
 //
 
+// Canny 邊緣
+
 
 #include <iostream>
 #include <opencv2/opencv.hpp>
@@ -31,7 +33,7 @@ int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "Hello, World!\n";
     
-    char str_input_image_1[] = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/output/test_morphology/IMG_2335-2_0_0_21.jpg";
+    char str_input_image_1[] = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/output/test_morphology/IMG_2338-2_0_0_21.jpg";
     
     /// Load an image
     src = imread( str_input_image_1, IMREAD_GRAYSCALE );
@@ -54,46 +56,50 @@ int main(int argc, const char * argv[]) {
     
     waitKey(0);
     
-    
-    // Define save file name
-    char str_save_name[100];
-    char str_do_number[30];
-    strcpy(str_save_name,
-           "../../output/test_morphology/IMG_2335-3");
+    {
+        // Define save file name
+        char str_save_name[100];
+        char str_do_number[30];
+        strcpy(str_save_name,
+               "../../output/test_morphology/IMG_2338-3");
 
-    
-    if (threshold1 > 100) {
-        sprintf(str_do_number, "_%d", threshold1);
-        strcat(str_save_name, str_do_number);
-    }else if (threshold1 > 10) {
-        sprintf(str_do_number, "_0%d", threshold1);
-        strcat(str_save_name, str_do_number);
-    }else{
-        sprintf(str_do_number, "_00%d", threshold1);
-        strcat(str_save_name, str_do_number);
+        
+        if (threshold1 > 100) {
+            sprintf(str_do_number, "_%d", threshold1);
+            strcat(str_save_name, str_do_number);
+        }else if (threshold1 > 10) {
+            sprintf(str_do_number, "_0%d", threshold1);
+            strcat(str_save_name, str_do_number);
+        }else{
+            sprintf(str_do_number, "_00%d", threshold1);
+            strcat(str_save_name, str_do_number);
+        }
+        if (threshold2 > 100) {
+            sprintf(str_do_number, "_%d", threshold2);
+            strcat(str_save_name, str_do_number);
+        }else if (threshold2 > 10) {
+            sprintf(str_do_number, "_0%d", threshold2);
+            strcat(str_save_name, str_do_number);
+        }else{
+            sprintf(str_do_number, "_00%d", threshold2);
+            strcat(str_save_name, str_do_number);
+        }
+        
+        strcat(str_save_name, ".png");
+        puts(str_save_name);
+        
+        std::vector<int> compression_params;
+        compression_params.push_back(CV_IMWRITE_PXM_BINARY);
+        compression_params.push_back(9);
+        
+        // Save image
+        imwrite(str_save_name, dst, compression_params);
     }
-    if (threshold2 > 100) {
-        sprintf(str_do_number, "_%d", threshold2);
-        strcat(str_save_name, str_do_number);
-    }else if (threshold2 > 10) {
-        sprintf(str_do_number, "_0%d", threshold2);
-        strcat(str_save_name, str_do_number);
-    }else{
-        sprintf(str_do_number, "_00%d", threshold2);
-        strcat(str_save_name, str_do_number);
-    }
-    
-    strcat(str_save_name, ".jpg");
-    puts(str_save_name);
-    
-    // Save image
-    imwrite(str_save_name, dst);
-    
     return 0;
 }
 
 /**
- * @function Morphology_Operations
+ * @function Canny_Operations
  */
 void Canny_Operations( int, void* )
 {
