@@ -29,7 +29,7 @@ char str_input_image_1[] = "Image file location.";
 ```
 
 
-儲存格式:
+**Save format**
 >Ex:[IMG_2334_Morph_1_0_07_Canny_050_150_Hough_108.jpg](/output/IMG_2334_Morph_1_0_07_Canny_050_150_Hough_108.jpg)
 >
 >於 Morphology_Mode 參數 Operator=1, Element=0, Kernel size=07
