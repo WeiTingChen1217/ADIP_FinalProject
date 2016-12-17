@@ -22,8 +22,12 @@
 - key board "R" : 重頭來過
 - key board "S" : 儲存結果
 
->**Parameters**
->- **str_input_image_1** : 輸入圖片位置
+**Parameters**
+- **str_input_image_1** : 輸入圖片位置
+```cpp
+char str_input_image_1[] = "Image file location.";
+```
+
 
 儲存格式:
 >Ex:[IMG_2334_Morph_1_0_07_Canny_050_150_Hough_108.jpg](/output/IMG_2334_Morph_1_0_07_Canny_050_150_Hough_108.jpg)
