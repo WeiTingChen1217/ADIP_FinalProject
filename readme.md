@@ -1,14 +1,14 @@
 ## 題目1
 正確標示出文件/書本封面
 
-* [IMG_2334.JPG](#IMG_2334.JPG)`/doc/ADIP_Final/nolight_lv1/IMG_2334.JPG`
+* [IMG_2334.JPG](#IMG_2334.JPG)
 
 <br />
 
 <a name="IMG_2334.JPG"></a> 
 ### 圖片 IMG_2334.JPG
 
-[圖片_src](/doc/ADIP_Final/nolight_lv1/IMG_2334.JPG)
+[圖片_src](/doc/ADIP_Final/nolight_lv1/IMG_2334.JPG), 
 [圖片_dst](/output/IMG_2334_Morph_1_0_07_Canny_050_150_Hough_108.jpg)
 
 主程式位置: [/ADIP_FinalProject/main.cpp](/ADIP_FinalProject/main.cpp)
