@@ -33,21 +33,20 @@ Mat src, src_row, src_before_equ;
 Mat dst_morphology, dst_canny, dst_standard_hough, dst_equalization;
 
 int morph_elem = 0;
-int morph_operator = 0;
-int morph_size = 0;
+int morph_operator = 1;
+int morph_size = 9;
 int const max_elem = 2;
 int const max_operator = 4;
 int const max_kernel_size = 21;
 
-int threshold1 = 50;
-int threshold2 = 150;
+int threshold1 = 127;
+int threshold2 = 127;
 int const max_threshold1 = 255;
 int const max_threshold2 = 255;
 
 int min_threshold = 50;
 int max_trackbar = 150;
-int s_trackbar = max_trackbar;
-int p_trackbar = max_trackbar;
+int s_trackbar = 40;
 
 const char* morphology_name = "Morphology Transformations Demo";
 const char* canny_name = "Canny Transformations Demo";
@@ -87,8 +86,7 @@ int main(int argc, const char * argv[]) {
     //  Morphology_Operations
     //=========================================
                 /// Create window
-                namedWindow(morphology_name, WINDOW_NORMAL);
-                
+                namedWindow(morphology_name, WINDOW_AUTOSIZE);
                 
                 /// Create Trackbar to select Morphology operation
                 createTrackbar("Operator:\n 0: Opening - 1: Closing  \n 2: Gradient - 3: Top Hat \n 4: Black Hat", morphology_name, &morph_operator, max_operator, Morphology_Operations );
@@ -117,6 +115,7 @@ int main(int argc, const char * argv[]) {
                     printf("Jump to the Canny_Mode.\n");
                     mode = Canny_Mode;
                     moveWindow(morphology_name, 500, 0);
+                    moveWindow(canny_name, 0, 0);
                     break;
                 }
                 else if (equalization_mode == keyIn){
@@ -147,13 +146,13 @@ int main(int argc, const char * argv[]) {
     //  Canny_Operations
     //=========================================
                 /// Create window
-                namedWindow(canny_name, WINDOW_NORMAL);
+                namedWindow(canny_name, WINDOW_AUTOSIZE);
                 
                 /// Create Trackbar to select threshold1
-                createTrackbar("threshold1: ", canny_name, &threshold1, max_threshold1, Canny_Operations );
+                createTrackbar("brightness: ", canny_name, &threshold1, max_threshold1, Canny_Operations );
                 
                 /// Create Trackbar to select threshold2
-                createTrackbar( "threshold2: ", canny_name, &threshold2, max_threshold2, Canny_Operations );
+                createTrackbar( "contrast: ", canny_name, &threshold2, max_threshold2, Canny_Operations );
                 
                 /// Default start
                 Canny_Operations(0, 0);
@@ -178,6 +177,7 @@ int main(int argc, const char * argv[]) {
                     mode = Standard_Hough_Mode;
                     destroyWindow(morphology_name);
                     moveWindow(canny_name, 500, 0);
+                    moveWindow(standard_name, 0, 0);
                     break;
                 }
                 else
@@ -333,7 +333,7 @@ void Canny_Operations( int, void* )
     Mat dst_2;
     Canny(dst_morphology, dst_canny, threshold1, threshold2, 3);
     threshold(dst_canny, dst_2, 128, 255, THRESH_BINARY_INV);  //反轉影像，讓邊緣呈現黑線
-    imshow(canny_name, dst_2 );
+    imshow(canny_name, dst_canny );
 }
 
 /**
