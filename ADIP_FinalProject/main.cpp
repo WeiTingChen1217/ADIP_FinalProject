@@ -46,12 +46,17 @@ int const max_threshold2 = 255;
 
 int min_threshold = 50;
 int max_trackbar = 150;
-int s_trackbar = 40;
+int s_trackbar = max_trackbar;
 
 const char* morphology_name = "Morphology Transformations Demo";
 const char* canny_name = "Canny Transformations Demo";
 const char* standard_name = "Standard Hough Lines Demo";
 const char* Equ_source_name = "Equ_source image";
+
+const char* str_input_image_1 = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/doc/ADIP_Final/nolight_lv1/IMG_2334.JPG";
+const char* save_name = "../../output/IMG_2334";
+
+vector<Mat> function_ab;
 
 
 /** Function Headers */
@@ -64,7 +69,7 @@ int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "ADIP Final Project.\n";
     
-    char str_input_image_1[] = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/doc/ADIP_Final/nolight_lv1/IMG_2334.JPG";
+//    char str_input_image_1[] = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/doc/ADIP_Final/nolight_lv1/IMG_2334.JPG";
     
     /// Load an image
     src = imread( str_input_image_1, IMREAD_GRAYSCALE );
@@ -82,9 +87,9 @@ int main(int argc, const char * argv[]) {
     while (1) {
         switch (mode) {
             case Morphology_Mode:
-    //=========================================
-    //  Morphology_Operations
-    //=========================================
+//=========================================
+//  Morphology_Operations
+//=========================================
                 /// Create window
                 namedWindow(morphology_name, WINDOW_AUTOSIZE);
                 
@@ -142,9 +147,9 @@ int main(int argc, const char * argv[]) {
                 
                 
             case Canny_Mode:
-    //=========================================
-    //  Canny_Operations
-    //=========================================
+//=========================================
+//  Canny_Operations
+//=========================================
                 /// Create window
                 namedWindow(canny_name, WINDOW_AUTOSIZE);
                 
@@ -185,9 +190,9 @@ int main(int argc, const char * argv[]) {
                 
                 
             case Standard_Hough_Mode:
-    //=========================================
-    //  Standard_Hough
-    //=========================================
+//=========================================
+//  Standard_Hough
+//=========================================
                 /// Create window
                 namedWindow( standard_name, WINDOW_AUTOSIZE );
                 
@@ -214,6 +219,42 @@ int main(int argc, const char * argv[]) {
                 else if(next_mode == keyIn){
                     printf("!!!! this is the Last mode. !!!!\n");
                     mode = Standard_Hough_Mode;
+                    
+                    vector<Mat> function_xy;
+                    function_xy.clear();
+                    for( size_t i = 0; i < function_ab.size(); i++ )
+                        for( size_t j = i + 1; j < function_ab.size(); j++ )
+                            if(i != j){
+                                Mat A = (Mat_<float>(2, 2) <<
+                                         function_ab[i].at<float>(0, 0), -1,
+                                         function_ab[j].at<float>(0, 0), -1
+                                         );
+                                Mat B = (Mat_<float>(2, 1) <<
+                                         -function_ab[i].at<float>(1, 0),
+                                         -function_ab[j].at<float>(1, 0)
+                                         );
+                                Mat x_out;
+
+                                solve(A, B, x_out);
+                                
+                                
+                                if (
+                                    x_out.at<float>(0, 0) < 0 ||
+                                    x_out.at<float>(1, 0) < 0 ||
+                                    x_out.at<float>(0, 0) > src.cols ||
+                                    x_out.at<float>(1, 0) > src.rows    ) {
+                                    printf("......");
+                                    cout << x_out << endl;
+                                }else
+                                    function_xy.push_back(x_out);
+                            }
+
+                    /// Print out
+                    cout << "Print out dot" << endl;
+                    for( size_t i = 0; i < function_xy.size(); i++ )
+                        cout << function_xy[i] << endl;
+                    cout << endl << endl;
+
                     break;
                 }
                 else
@@ -242,8 +283,7 @@ int main(int argc, const char * argv[]) {
             // Define save file name
             char str_save_name[100];
             char str_do_number[30];
-            strcpy(str_save_name,
-                   "../../output/IMG_2334");
+            strcpy(str_save_name, save_name);
             /// Morphology_Operations
             sprintf(str_do_number, "_Morph_%d", morph_operator);
             strcat(str_save_name, str_do_number);
@@ -333,7 +373,7 @@ void Canny_Operations( int, void* )
     Mat dst_2;
     Canny(dst_morphology, dst_canny, threshold1, threshold2, 3);
     threshold(dst_canny, dst_2, 128, 255, THRESH_BINARY_INV);  //反轉影像，讓邊緣呈現黑線
-    imshow(canny_name, dst_canny );
+    imshow(canny_name, dst_2 );
 }
 
 /**
@@ -347,6 +387,9 @@ void Standard_Hough( int, void* )
     /// 1. Use Standard Hough Transform
     HoughLines( dst_canny, s_lines, 1, CV_PI/180, min_threshold + s_trackbar, 0, 0 );
     
+    /// Clear all contant
+    function_ab.clear();
+    
     /// Show the result
     for( size_t i = 0; i < s_lines.size(); i++ )
     {
@@ -358,7 +401,46 @@ void Standard_Hough( int, void* )
         Point pt1( cvRound(x0 + alpha*(-sin_t)), cvRound(y0 + alpha*cos_t) );
         Point pt2( cvRound(x0 - alpha*(-sin_t)), cvRound(y0 - alpha*cos_t) );
         line( dst_standard_hough, pt1, pt2, Scalar(255,0,0), 3, LINE_AA);
+        
+        cout << "pt1: " << pt1 << "\tpt2: " << pt2 << endl;
+        
+//        /// Calculate a and b to generate line function
+//        Mat A = (Mat_<float>(2, 2) <<
+//                 pt1.x, 1,
+//                 pt2.x, 1);
+//        Mat B = (Mat_<float>(2, 1) <<
+//                 pt1.y,
+//                 pt2.y);
+//        Mat x_out;
+//        
+//        solve(A, B, x_out);
+//        
+//        function_ab.push_back(x_out);
+        
+        float slope, intercept;
+        float dx, dy;
+        
+        dx = pt2.x - pt1.x;
+        dy = pt2.y - pt1.y;
+        
+        if (dx == 0) {
+            slope = 1;
+            intercept = -(slope * pt1.x);
+        }else{
+            slope = dy / dx;
+            intercept = pt1.y - slope * pt1.x;
+        }
+        Mat perameter = (Mat_<float>(2, 1) <<
+                           slope,
+                           intercept);;
+        
+        function_ab.push_back(perameter);
     }
+    
+    /// Print out x
+    for( size_t i = 0; i < s_lines.size(); i++ )
+        cout << function_ab[i] << endl;
+    cout << endl << endl;
     
     imshow( standard_name, dst_standard_hough );
 }
