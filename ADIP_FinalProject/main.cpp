@@ -12,6 +12,7 @@
 #define Morphology_Mode 1
 #define Canny_Mode 2
 #define Standard_Hough_Mode 3
+#define ROI_four_point 4
 
 /// key board define
 #define esc 27 // the key esc
@@ -46,14 +47,14 @@ int const max_threshold2 = 255;
 
 int min_threshold = 50;
 int max_trackbar = 150;
-int s_trackbar = max_trackbar;
+int s_trackbar = max_trackbar/2;
 
 const char* morphology_name = "Morphology Transformations Demo";
 const char* canny_name = "Canny Transformations Demo";
 const char* standard_name = "Standard Hough Lines Demo";
 const char* Equ_source_name = "Equ_source image";
 
-const char* str_input_image_1 = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/doc/ADIP_Final/nolight_lv1/IMG_2334.JPG";
+const char* str_input_image_1 = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/doc/test/5.JPG";
 const char* save_name = "../../output/IMG_2334";
 
 vector<Mat> function_ab;
@@ -82,8 +83,11 @@ int main(int argc, const char * argv[]) {
     
     src_row = src.clone();
 
+    // Local varibale for while loop
     int mode = 1, keyIn = 0;
     int His_Equ_Flag = 0;
+    vector<Point2f> pt;
+    
     while (1) {
         switch (mode) {
             case Morphology_Mode:
@@ -217,42 +221,42 @@ int main(int argc, const char * argv[]) {
                     break;
                 }
                 else if(next_mode == keyIn){
-                    printf("!!!! this is the Last mode. !!!!\n");
-                    mode = Standard_Hough_Mode;
+                    printf("Jump to the ROI_four_point.\n");
+                    mode = ROI_four_point;
                     
-                    vector<Mat> function_xy;
-                    function_xy.clear();
-                    for( size_t i = 0; i < function_ab.size(); i++ )
-                        for( size_t j = i + 1; j < function_ab.size(); j++ )
-                            if(i != j){
-                                Mat A = (Mat_<float>(2, 2) <<
-                                         function_ab[i].at<float>(0, 0), -1,
-                                         function_ab[j].at<float>(0, 0), -1
-                                         );
-                                Mat B = (Mat_<float>(2, 1) <<
-                                         -function_ab[i].at<float>(1, 0),
-                                         -function_ab[j].at<float>(1, 0)
-                                         );
-                                Mat x_out;
+                    destroyWindow(canny_name);
+                    destroyWindow(standard_name);
+                    
+                    pt.clear();
 
-                                solve(A, B, x_out);
-                                
-                                
-                                if (
-                                    x_out.at<float>(0, 0) < 0 ||
-                                    x_out.at<float>(1, 0) < 0 ||
-                                    x_out.at<float>(0, 0) > src.cols ||
-                                    x_out.at<float>(1, 0) > src.rows    ) {
-                                    printf("......");
-                                    cout << x_out << endl;
-                                }else
-                                    function_xy.push_back(x_out);
-                            }
+                    for( size_t i = 0; i < function_ab.size(); i++ )
+                        for( size_t j = i + 1; j < function_ab.size(); j++ ) {
+                            
+                            float a1 = function_ab[i].at<float>(0, 0);
+                            float b1 = function_ab[i].at<float>(0, 1);
+                            float c1 = function_ab[i].at<float>(0, 2);
+                            float a2 = function_ab[j].at<float>(0, 0);
+                            float b2 = function_ab[j].at<float>(0, 1);
+                            float c2 = function_ab[j].at<float>(0, 2);
+                            
+                            float delta = a1*b2 - a2*b1;
+                            float delta_x = (-c1)*b2 - (-c2)*b1;
+                            float delta_y = (-c2)*a1 - (-c1)*a2;
+                            
+                            Point2f _pt(delta_x/delta, delta_y/delta);
+                            
+                            if (_pt.x < 0 || _pt.x > src.cols ||
+                                _pt.y < 0 || _pt.y > src.rows    ) {
+//                                printf("......");
+//                                cout << _pt << endl;
+                            }else
+                                pt.push_back(_pt);
+                        }
 
                     /// Print out
                     cout << "Print out dot" << endl;
-                    for( size_t i = 0; i < function_xy.size(); i++ )
-                        cout << function_xy[i] << endl;
+                    for( size_t i = 0; i < pt.size(); i++ )
+                        cout << pt[i] << endl;
                     cout << endl << endl;
 
                     break;
@@ -260,8 +264,64 @@ int main(int argc, const char * argv[]) {
                 else
                     break;
                 
-            default:
+            case ROI_four_point:
+//=========================================
+//  Fint book's or paper's corner point
+//=========================================
+                Point2f pt0, pt1, pt2, pt3;
+                float min_dist_0 = 0, min_dist_1 = 0, min_dist_2 = 0, min_dist_3 = 0;
+                
+                for (size_t i = 0; i < pt.size(); i++){
+                    
+                    Point2f _pt1 = pt[i];
+                    
+                    /// find pt0
+                    float delta_0_x = abs(   0     - _pt1.x);
+                    float delta_0_y = abs(   0     - _pt1.y);
+                    float dist_0 = sqrt(pow(delta_0_x, 2) + pow(delta_0_y, 2));
+                    
+                    if (i == 0 || dist_0 < min_dist_0) {
+                        pt0 = _pt1;
+                        min_dist_0 = dist_0;
+                    }
+                    
+                    float delta_1_x = abs(src.cols - _pt1.x);
+                    float delta_1_y = abs(   0     - _pt1.y);
+                    float dist_1 = sqrt(pow(delta_1_x, 2) + pow(delta_1_y, 2));
+                    
+                    if (i == 0 || dist_1 < min_dist_1) {
+                        pt1 = _pt1;
+                        min_dist_1 = dist_1;
+                    }
+                    
+                    float delta_2_x = abs(   0     - _pt1.x);
+                    float delta_2_y = abs(src.rows - _pt1.y);
+                    float dist_2 = sqrt(pow(delta_2_x, 2) + pow(delta_2_y, 2));
+
+                    if (i == 0 || dist_2 < min_dist_2) {
+                        pt2 = _pt1;
+                        min_dist_2 = dist_2;
+                    }
+                    
+                    float delta_3_x = abs(src.cols - _pt1.x);
+                    float delta_3_y = abs(src.rows - _pt1.y);
+                    float dist_3 = sqrt(pow(delta_3_x, 2) + pow(delta_3_y, 2));
+
+                    if (i == 0 || dist_3 < min_dist_3) {
+                        pt3 = _pt1;
+                        min_dist_3 = dist_3;
+                    }
+                }
+                cout << "pt0: " << pt0 << endl;
+                cout << "pt1: " << pt1 << endl;
+                cout << "pt2: " << pt2 << endl;
+                cout << "pt3: " << pt3 << endl;
+
+                keyIn = waitKey(0);
+                
                 break;
+//            default:
+//                break;
         }
         
         if (reseat_mode == keyIn){
@@ -402,45 +462,28 @@ void Standard_Hough( int, void* )
         Point pt2( cvRound(x0 - alpha*(-sin_t)), cvRound(y0 - alpha*cos_t) );
         line( dst_standard_hough, pt1, pt2, Scalar(255,0,0), 3, LINE_AA);
         
-        cout << "pt1: " << pt1 << "\tpt2: " << pt2 << endl;
+//        cout << "pt1: " << pt1 << "\tpt2: " << pt2 << endl;
         
-//        /// Calculate a and b to generate line function
-//        Mat A = (Mat_<float>(2, 2) <<
-//                 pt1.x, 1,
-//                 pt2.x, 1);
-//        Mat B = (Mat_<float>(2, 1) <<
-//                 pt1.y,
-//                 pt2.y);
-//        Mat x_out;
-//        
-//        solve(A, B, x_out);
-//        
-//        function_ab.push_back(x_out);
+        int delta_x = pt1.x - pt2.x;
+        int delta_y = pt1.y - pt2.y;
         
-        float slope, intercept;
-        float dx, dy;
-        
-        dx = pt2.x - pt1.x;
-        dy = pt2.y - pt1.y;
-        
-        if (dx == 0) {
-            slope = 1;
-            intercept = -(slope * pt1.x);
-        }else{
-            slope = dy / dx;
-            intercept = pt1.y - slope * pt1.x;
+        Mat perameter;
+        if (delta_x == 0) {
+            perameter = (Mat_<float>(1, 3) << 1, 0, -(pt1.x));
+        }else if (delta_y == 0) {
+            perameter = (Mat_<float>(1, 3) << 0, 1, -(pt1.y));
+        }else {
+            float slope = delta_y/delta_x;
+            perameter = (Mat_<float>(1, 3) << slope, -1, pt1.y-slope*pt1.x);
         }
-        Mat perameter = (Mat_<float>(2, 1) <<
-                           slope,
-                           intercept);;
         
         function_ab.push_back(perameter);
     }
     
     /// Print out x
-    for( size_t i = 0; i < s_lines.size(); i++ )
-        cout << function_ab[i] << endl;
-    cout << endl << endl;
+//    for( size_t i = 0; i < s_lines.size(); i++ )
+//        cout << function_ab[i] << endl;
+//    cout << endl << endl;
     
     imshow( standard_name, dst_standard_hough );
 }
