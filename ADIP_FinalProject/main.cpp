@@ -54,8 +54,8 @@ const char* canny_name = "Canny Transformations Demo";
 const char* standard_name = "Standard Hough Lines Demo";
 const char* Equ_source_name = "Equ_source image";
 
-const char* str_input_image_1 = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/doc/test/5.JPG";
-const char* save_name = "../../output/IMG_2334";
+const char* str_input_image_1 = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/doc/test/9.JPG";
+const char* save_name = "../../output/IMG";
 
 vector<Mat> function_ab;
 
@@ -64,7 +64,8 @@ vector<Mat> function_ab;
 void Morphology_Operations( int, void* );
 void Canny_Operations(int, void*);
 void Standard_Hough( int, void* );
-
+void calibrateTransform(Mat* _src, Mat* out, vector<Point2f> point);
+void rotateImage(IplImage* img, IplImage *img_rotate,int degree);
 
 int main(int argc, const char * argv[]) {
     // insert code here...
@@ -74,15 +75,36 @@ int main(int argc, const char * argv[]) {
     
     /// Load an image
     src = imread( str_input_image_1, IMREAD_GRAYSCALE );
+    Mat src_color = imread( str_input_image_1, IMREAD_COLOR );
     
-    if( src.empty() )
+    
+    if( src.empty() || src_color.empty())
     { return -1; }
     
     Size size(src.cols/4,src.rows/4);
     resize(src, src, size);
+    Size size2(src_color.cols/4, src_color.rows/4);
+    resize(src_color, src_color, size2);
     
     src_row = src.clone();
-
+    
+    
+//    /// 旋轉影像
+//    if (src.rows < src.cols) {
+//        //設定旋轉中心、旋轉角度和縮放倍率
+//        Mat _src = Mat::zeros(src.cols, src.rows, src.type());
+//        Point center = Point(_src.cols/2, _src.rows/2);
+//        double angle = 90.0;
+//        double scale = 1;
+//        
+//        Mat rot_mat = getRotationMatrix2D(center, angle, scale);
+//        warpAffine(src, _src, rot_mat, _src.size());
+//        
+//        imshow("Affine_2", _src);
+//        waitKey(0);
+//        
+//    }
+    
     // Local varibale for while loop
     int mode = 1, keyIn = 0;
     int His_Equ_Flag = 0;
@@ -94,6 +116,7 @@ int main(int argc, const char * argv[]) {
 //=========================================
 //  Morphology_Operations
 //=========================================
+            {
                 /// Create window
                 namedWindow(morphology_name, WINDOW_AUTOSIZE);
                 
@@ -110,6 +133,8 @@ int main(int argc, const char * argv[]) {
                 Morphology_Operations( 0, 0 );
                 
                 keyIn = waitKey(0);
+//                keyIn = next_mode;
+
                 if(back_mode == keyIn){
                     keyIn = reseat_mode;
                     break;
@@ -148,12 +173,13 @@ int main(int argc, const char * argv[]) {
                 }
                 else
                     break;
-                
+            }
                 
             case Canny_Mode:
 //=========================================
 //  Canny_Operations
 //=========================================
+            {
                 /// Create window
                 namedWindow(canny_name, WINDOW_AUTOSIZE);
                 
@@ -167,6 +193,8 @@ int main(int argc, const char * argv[]) {
                 Canny_Operations(0, 0);
                 
                 keyIn = waitKey(0);
+//                keyIn = next_mode;
+
                 if(back_mode == keyIn){
                     printf("Go back to Morphology_Mode.\n");
                     mode = Morphology_Mode;
@@ -191,12 +219,13 @@ int main(int argc, const char * argv[]) {
                 }
                 else
                     break;
-                
+            }
                 
             case Standard_Hough_Mode:
 //=========================================
 //  Standard_Hough
 //=========================================
+            {
                 /// Create window
                 namedWindow( standard_name, WINDOW_AUTOSIZE );
                 
@@ -207,6 +236,8 @@ int main(int argc, const char * argv[]) {
                 Standard_Hough(0, 0);
 
                 keyIn = waitKey(0);
+//                keyIn = next_mode;
+
                 if(back_mode == keyIn){
                     printf("Go back to Canny_Mode.\n");
                     mode = Canny_Mode;
@@ -254,20 +285,21 @@ int main(int argc, const char * argv[]) {
                         }
 
                     /// Print out
-                    cout << "Print out dot" << endl;
-                    for( size_t i = 0; i < pt.size(); i++ )
-                        cout << pt[i] << endl;
-                    cout << endl << endl;
+//                    cout << "Print out dot" << endl;
+//                    for( size_t i = 0; i < pt.size(); i++ )
+//                        cout << pt[i] << endl;
+//                    cout << endl << endl;
 
                     break;
                 }
                 else
                     break;
-                
+            }
             case ROI_four_point:
 //=========================================
 //  Fint book's or paper's corner point
 //=========================================
+            {
                 Point2f pt0, pt1, pt2, pt3;
                 float min_dist_0 = 0, min_dist_1 = 0, min_dist_2 = 0, min_dist_3 = 0;
                 
@@ -312,14 +344,30 @@ int main(int argc, const char * argv[]) {
                         min_dist_3 = dist_3;
                     }
                 }
+                /// print four corner
                 cout << "pt0: " << pt0 << endl;
                 cout << "pt1: " << pt1 << endl;
                 cout << "pt2: " << pt2 << endl;
                 cout << "pt3: " << pt3 << endl;
+                
+                vector<Point2f> corners;
+                corners.push_back(pt0);
+                corners.push_back(pt1);
+                corners.push_back(pt2);
+                corners.push_back(pt3);
 
+                Mat img_new;
+                calibrateTransform(&src_color, &img_new, corners);
+
+                namedWindow("Test1", CV_WINDOW_NORMAL);
+                imshow("Test1", src_color);
+                namedWindow("Test2", CV_WINDOW_NORMAL);
+                imshow("Test2", img_new);
+                
                 keyIn = waitKey(0);
                 
                 break;
+            }
 //            default:
 //                break;
         }
@@ -328,9 +376,9 @@ int main(int argc, const char * argv[]) {
             printf("restart...\n...\n...\n...\n");
             mode = Morphology_Mode;
             src = src_row.clone();
-            morph_elem = 0;
-            morph_size = 0;
-            morph_operator = 0;
+//            morph_elem = 0;
+//            morph_size = 0;
+//            morph_operator = 0;
             destroyWindow(canny_name);
             destroyWindow(standard_name);
             destroyWindow(Equ_source_name);
@@ -462,18 +510,19 @@ void Standard_Hough( int, void* )
         Point pt2( cvRound(x0 - alpha*(-sin_t)), cvRound(y0 - alpha*cos_t) );
         line( dst_standard_hough, pt1, pt2, Scalar(255,0,0), 3, LINE_AA);
         
-//        cout << "pt1: " << pt1 << "\tpt2: " << pt2 << endl;
+        cout << "pt1: " << pt1 << "\tpt2: " << pt2 << endl;
         
         int delta_x = pt1.x - pt2.x;
         int delta_y = pt1.y - pt2.y;
         
         Mat perameter;
-        if (delta_x == 0) {
+        if (delta_x == 0)
             perameter = (Mat_<float>(1, 3) << 1, 0, -(pt1.x));
-        }else if (delta_y == 0) {
+        else if (delta_y == 0)
             perameter = (Mat_<float>(1, 3) << 0, 1, -(pt1.y));
-        }else {
-            float slope = delta_y/delta_x;
+        else {
+            cout << "delta_x, y:" << delta_x << ", " << delta_y << endl;
+            float slope = (float)delta_y / delta_x;
             perameter = (Mat_<float>(1, 3) << slope, -1, pt1.y-slope*pt1.x);
         }
         
@@ -481,9 +530,60 @@ void Standard_Hough( int, void* )
     }
     
     /// Print out x
-//    for( size_t i = 0; i < s_lines.size(); i++ )
-//        cout << function_ab[i] << endl;
-//    cout << endl << endl;
+    for( size_t i = 0; i < s_lines.size(); i++ )
+        cout << function_ab[i] << endl;
+    cout << endl << endl;
     
     imshow( standard_name, dst_standard_hough );
+}
+
+/**
+ * @calibrate img
+ */
+void calibrateTransform(Mat* src, Mat* out, vector<Point2f> point) {
+    
+    int width = 0, height = 0;
+    int rotate = 0;
+    // Get min rectangle
+    RotatedRect box = minAreaRect(cv::Mat(point));
+    
+    // Calculate Size
+    if (box.boundingRect().width > box.boundingRect().height) {
+        height = box.boundingRect().width;
+        width = height / sqrt(2);
+        rotate = 1;
+    }
+    else {
+        height = box.boundingRect().height;
+        width = height / sqrt(2);
+        rotate = 0;
+    }
+    
+    vector<Point2f> pointM(4);
+    if (rotate == 1) {
+        // Rotate Left 90 degree
+        pointM[0] = point[1];
+        pointM[1] = point[3];
+        pointM[2] = point[0];
+        pointM[3] = point[2];
+    }else
+        pointM = point;
+    
+    
+    cout << "rotate:" << pointM << endl;
+    // Set Transform coords
+    vector<Point2f> point_trans(4);
+    point_trans[0] = Point2f(0, 0);
+    point_trans[1] = Point2f(width, 0);
+    point_trans[2] = Point2f(0, height);
+    point_trans[3] = Point2f(width, height);
+    
+    
+    // Get Transform Matrix & Output Image
+    Mat transform = getPerspectiveTransform(pointM, point_trans);
+    
+    // Transform
+    Size size(width, height); // Set Output size
+    warpPerspective(*src, *out, transform, size, INTER_LINEAR, BORDER_CONSTANT);
+    
 }
