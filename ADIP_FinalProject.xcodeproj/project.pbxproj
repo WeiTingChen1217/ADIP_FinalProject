@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A802F68E1E0398AF00E7320D /* HoughLines_Demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A802F68D1E0398AF00E7320D /* HoughLines_Demo.cpp */; };
-		A88D17521DF93786001635B4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A88D17511DF93786001635B4 /* main.cpp */; };
+		A808811B1E1270BC00EDAC11 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A88D17511DF93786001635B4 /* main.cpp */; };
 		A88D17751DF96143001635B4 /* Morphology_2-3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A88D17741DF96143001635B4 /* Morphology_2-3.cpp */; };
 		A8D534741DFA864F001D137D /* test_findContours.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8D5346D1DFA7012001D137D /* test_findContours.cpp */; };
 /* End PBXBuildFile section */
@@ -468,7 +468,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A88D17521DF93786001635B4 /* main.cpp in Sources */,
+				A808811B1E1270BC00EDAC11 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

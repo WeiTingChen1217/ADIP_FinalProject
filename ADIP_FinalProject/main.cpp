@@ -5,23 +5,28 @@
 //  Created by WeiTingChen on 12/8/16.
 //  Copyright © 2016 WeiTingChen. All rights reserved.
 //
+#define _CRT_SECURE_NO_WARNINGS
+//#define AUTO
 
 #include <iostream>
+//#include <direct.h>
 #include <opencv2/opencv.hpp>
 
-#define Morphology_Mode 1
-#define Canny_Mode 2
-#define Standard_Hough_Mode 3
-#define ROI_four_point 4
+#define Morphology_Mode         1
+#define Canny_Mode              2
+#define Standard_Hough_Mode     3
+#define ROI_four_point          4
+
 
 /// key board define
-#define esc 27 // the key esc
-#define back_mode 49 // the key 1
-#define loop_mode 50 // the key 2
-#define next_mode 51 // the key 3
-#define reseat_mode 114 // the key R
-#define equalization_mode 101 // the key E
-#define save_image 115 // the key S
+#define esc                     27  // the key esc
+#define back_mode               49  // the key 1
+#define loop_mode               50  // the key 2
+#define next_mode               51  // the key 3
+#define reseat_mode             114 // the key R
+#define equalization_mode       101 // the key E
+#define save_image              115 // the key S
+#define Gamma_Correction        103 // the key G
 
 
 
@@ -54,8 +59,8 @@ const char* canny_name = "Canny Transformations Demo";
 const char* standard_name = "Standard Hough Lines Demo";
 const char* Equ_source_name = "Equ_source image";
 
-const char* str_input_image_1 = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/doc/test/9.JPG";
-const char* save_name = "../../output/IMG";
+const char* str_input_image_1 = "../../doc/test/0.JPG";
+const char* save_name = "../../output/IMG0";
 
 vector<Mat> function_ab;
 
@@ -66,20 +71,48 @@ void Canny_Operations(int, void*);
 void Standard_Hough( int, void* );
 void calibrateTransform(Mat* _src, Mat* out, vector<Point2f> point);
 void rotateImage(IplImage* img, IplImage *img_rotate,int degree);
+void findPoint(vector<Point2f> &pt);
+void findCornerPoint(vector<Point2f> &pt, vector<Point2f> &corners);
+void GammaCorrection(Mat& _src, Mat& _dst, float fGamma);
+
 
 int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "ADIP Final Project.\n";
+    std::cout << "Enter \"esc\" to end the project.\n";
+
     
 //    char str_input_image_1[] = "/Users/WeiTing_Chen/Desktop/ADIP_FinalProject/doc/ADIP_Final/nolight_lv1/IMG_2334.JPG";
     
-    /// Load an image
-    src = imread( str_input_image_1, IMREAD_GRAYSCALE );
-    Mat src_color = imread( str_input_image_1, IMREAD_COLOR );
     
+    // Read File
+    Mat src_color;
     
+    if (argc == 2) {
+        // Use command parameter
+        src = imread(argv[1], IMREAD_GRAYSCALE);
+        src_color = imread(argv[1], IMREAD_COLOR);
+    }
+    else {
+        // Use default parameter
+        cout << "Use default parameter" << endl;
+        src = imread(str_input_image_1, IMREAD_GRAYSCALE);
+        src_color = imread(str_input_image_1, IMREAD_COLOR);
+    }
+    
+    // Error Information
     if( src.empty() || src_color.empty())
-    { return -1; }
+    {
+        if (argc == 2)
+            fprintf(stderr, "=== Cannot Read Command File : %s ===\n", argv[1]);
+        else
+            fprintf(stderr, "=== Cannot Read Default File : %s ===\n", str_input_image_1);
+        
+        system("PAUSE");
+        exit(1);	
+    }
+    
+    
     
     Size size(src.cols/4,src.rows/4);
     resize(src, src, size);
@@ -88,27 +121,12 @@ int main(int argc, const char * argv[]) {
     
     src_row = src.clone();
     
-    
-//    /// 旋轉影像
-//    if (src.rows < src.cols) {
-//        //設定旋轉中心、旋轉角度和縮放倍率
-//        Mat _src = Mat::zeros(src.cols, src.rows, src.type());
-//        Point center = Point(_src.cols/2, _src.rows/2);
-//        double angle = 90.0;
-//        double scale = 1;
-//        
-//        Mat rot_mat = getRotationMatrix2D(center, angle, scale);
-//        warpAffine(src, _src, rot_mat, _src.size());
-//        
-//        imshow("Affine_2", _src);
-//        waitKey(0);
-//        
-//    }
-    
     // Local varibale for while loop
-    int mode = 1, keyIn = 0;
-    int His_Equ_Flag = 0;
+    int mode = Morphology_Mode, keyIn = 0;
+    int His_Equ_Flag = 0, Gamma_Flag = 0;
     vector<Point2f> pt;
+    // Calibrate
+    Mat result;
     
     while (1) {
         switch (mode) {
@@ -132,9 +150,11 @@ int main(int argc, const char * argv[]) {
                 /// Default start
                 Morphology_Operations( 0, 0 );
                 
+#ifdef AUTO
+                keyIn = next_mode;
+#else
                 keyIn = waitKey(0);
-//                keyIn = next_mode;
-
+#endif
                 if(back_mode == keyIn){
                     keyIn = reseat_mode;
                     break;
@@ -171,6 +191,22 @@ int main(int argc, const char * argv[]) {
                     src = dst_equalization.clone();
                     break;
                 }
+                else if (Gamma_Correction == keyIn){
+                    printf("Do Gamma_Correction.\n");
+                    Gamma_Flag = 1;
+
+                    
+                    Mat dst_gama;
+                    GammaCorrection(src, dst_gama, 0.3);
+                    
+                    /// Display results
+                    namedWindow( "Gama", WINDOW_AUTOSIZE );
+                    moveWindow("Gama", 500, 0);
+                    imshow( "Gama", dst_gama );
+                    
+                    src = dst_gama.clone();
+                    break;
+                }
                 else
                     break;
             }
@@ -192,8 +228,12 @@ int main(int argc, const char * argv[]) {
                 /// Default start
                 Canny_Operations(0, 0);
                 
+#ifdef AUTO
+                keyIn = next_mode;
+                
+#else
                 keyIn = waitKey(0);
-//                keyIn = next_mode;
+#endif
 
                 if(back_mode == keyIn){
                     printf("Go back to Morphology_Mode.\n");
@@ -235,8 +275,11 @@ int main(int argc, const char * argv[]) {
                 /// Default start
                 Standard_Hough(0, 0);
 
+#ifdef AUTO
+                keyIn = next_mode;
+#else
                 keyIn = waitKey(0);
-//                keyIn = next_mode;
+#endif
 
                 if(back_mode == keyIn){
                     printf("Go back to Canny_Mode.\n");
@@ -258,31 +301,8 @@ int main(int argc, const char * argv[]) {
                     destroyWindow(canny_name);
                     destroyWindow(standard_name);
                     
-                    pt.clear();
-
-                    for( size_t i = 0; i < function_ab.size(); i++ )
-                        for( size_t j = i + 1; j < function_ab.size(); j++ ) {
-                            
-                            float a1 = function_ab[i].at<float>(0, 0);
-                            float b1 = function_ab[i].at<float>(0, 1);
-                            float c1 = function_ab[i].at<float>(0, 2);
-                            float a2 = function_ab[j].at<float>(0, 0);
-                            float b2 = function_ab[j].at<float>(0, 1);
-                            float c2 = function_ab[j].at<float>(0, 2);
-                            
-                            float delta = a1*b2 - a2*b1;
-                            float delta_x = (-c1)*b2 - (-c2)*b1;
-                            float delta_y = (-c2)*a1 - (-c1)*a2;
-                            
-                            Point2f _pt(delta_x/delta, delta_y/delta);
-                            
-                            if (_pt.x < 0 || _pt.x > src.cols ||
-                                _pt.y < 0 || _pt.y > src.rows    ) {
-//                                printf("......");
-//                                cout << _pt << endl;
-                            }else
-                                pt.push_back(_pt);
-                        }
+                    findPoint(pt);
+                    
 
                     /// Print out
 //                    cout << "Print out dot" << endl;
@@ -297,72 +317,21 @@ int main(int argc, const char * argv[]) {
             }
             case ROI_four_point:
 //=========================================
-//  Fint book's or paper's corner point
+//  Find book's or paper's corner point
 //=========================================
             {
-                Point2f pt0, pt1, pt2, pt3;
-                float min_dist_0 = 0, min_dist_1 = 0, min_dist_2 = 0, min_dist_3 = 0;
-                
-                for (size_t i = 0; i < pt.size(); i++){
-                    
-                    Point2f _pt1 = pt[i];
-                    
-                    /// find pt0
-                    float delta_0_x = abs(   0     - _pt1.x);
-                    float delta_0_y = abs(   0     - _pt1.y);
-                    float dist_0 = sqrt(pow(delta_0_x, 2) + pow(delta_0_y, 2));
-                    
-                    if (i == 0 || dist_0 < min_dist_0) {
-                        pt0 = _pt1;
-                        min_dist_0 = dist_0;
-                    }
-                    
-                    float delta_1_x = abs(src.cols - _pt1.x);
-                    float delta_1_y = abs(   0     - _pt1.y);
-                    float dist_1 = sqrt(pow(delta_1_x, 2) + pow(delta_1_y, 2));
-                    
-                    if (i == 0 || dist_1 < min_dist_1) {
-                        pt1 = _pt1;
-                        min_dist_1 = dist_1;
-                    }
-                    
-                    float delta_2_x = abs(   0     - _pt1.x);
-                    float delta_2_y = abs(src.rows - _pt1.y);
-                    float dist_2 = sqrt(pow(delta_2_x, 2) + pow(delta_2_y, 2));
-
-                    if (i == 0 || dist_2 < min_dist_2) {
-                        pt2 = _pt1;
-                        min_dist_2 = dist_2;
-                    }
-                    
-                    float delta_3_x = abs(src.cols - _pt1.x);
-                    float delta_3_y = abs(src.rows - _pt1.y);
-                    float dist_3 = sqrt(pow(delta_3_x, 2) + pow(delta_3_y, 2));
-
-                    if (i == 0 || dist_3 < min_dist_3) {
-                        pt3 = _pt1;
-                        min_dist_3 = dist_3;
-                    }
-                }
-                /// print four corner
-                cout << "pt0: " << pt0 << endl;
-                cout << "pt1: " << pt1 << endl;
-                cout << "pt2: " << pt2 << endl;
-                cout << "pt3: " << pt3 << endl;
-                
+                //  Find book's or paper's corner point
                 vector<Point2f> corners;
-                corners.push_back(pt0);
-                corners.push_back(pt1);
-                corners.push_back(pt2);
-                corners.push_back(pt3);
+                findCornerPoint(pt, corners);
+                
+                calibrateTransform(&src_color, &result, corners);
 
-                Mat img_new;
-                calibrateTransform(&src_color, &img_new, corners);
-
-                namedWindow("Test1", CV_WINDOW_NORMAL);
+                namedWindow("Test1", CV_WINDOW_AUTOSIZE);
+                moveWindow("Test1", 0, 0);
                 imshow("Test1", src_color);
-                namedWindow("Test2", CV_WINDOW_NORMAL);
-                imshow("Test2", img_new);
+                namedWindow("Test2", CV_WINDOW_AUTOSIZE);
+                moveWindow("Test2", src_color.cols, 0);
+                imshow("Test2", result);
                 
                 keyIn = waitKey(0);
                 
@@ -376,9 +345,9 @@ int main(int argc, const char * argv[]) {
             printf("restart...\n...\n...\n...\n");
             mode = Morphology_Mode;
             src = src_row.clone();
-//            morph_elem = 0;
-//            morph_size = 0;
-//            morph_operator = 0;
+            morph_elem = 0;
+            morph_size = 0;
+            morph_operator = 0;
             destroyWindow(canny_name);
             destroyWindow(standard_name);
             destroyWindow(Equ_source_name);
@@ -388,11 +357,14 @@ int main(int argc, const char * argv[]) {
         }
         else if (save_image == keyIn){
             printf("\n\n\n\nSave Image.\n");
+        
+            
             // Define save file name
             char str_save_name[100];
             char str_do_number[30];
             strcpy(str_save_name, save_name);
-            /// Morphology_Operations
+            
+        /// Morphology_Operations
             sprintf(str_do_number, "_Morph_%d", morph_operator);
             strcat(str_save_name, str_do_number);
             sprintf(str_do_number, "_%d", morph_elem);
@@ -405,7 +377,7 @@ int main(int argc, const char * argv[]) {
                 strcat(str_save_name, str_do_number);
             }
             
-            /// Canny_Operations
+        /// Canny_Operations
             sprintf(str_do_number, "_Canny");
             strcat(str_save_name, str_do_number);
             if (threshold1 > 100) {
@@ -431,16 +403,32 @@ int main(int argc, const char * argv[]) {
                 strcat(str_save_name, str_do_number);
             }
             
-            /// Standard_Hough
+        /// Standard_Hough
             sprintf(str_do_number, "_Hough");
             strcat(str_save_name, str_do_number);
-            sprintf(str_do_number, "_%d", s_trackbar);
-            strcat(str_save_name, str_do_number);
+            if (s_trackbar > 100) {
+                sprintf(str_do_number, "_%d", s_trackbar);
+                strcat(str_save_name, str_do_number);
+            }else if(s_trackbar > 10){
+                sprintf(str_do_number, "_0%d", s_trackbar);
+                strcat(str_save_name, str_do_number);
+            }
+            else{
+                sprintf(str_do_number, "_00%d", s_trackbar);
+                strcat(str_save_name, str_do_number);
+            }
             
-            /// Histogram equalization
+        /// Histogram equalization
             
             if(His_Equ_Flag){
                 sprintf(str_do_number, "_Equ");
+                strcat(str_save_name, str_do_number);
+            }
+            
+        /// Gamma
+
+            if(Gamma_Flag){
+                sprintf(str_do_number, "_Gamma");
                 strcat(str_save_name, str_do_number);
             }
             
@@ -448,7 +436,7 @@ int main(int argc, const char * argv[]) {
             puts(str_save_name);
             
             // Save image
-            imwrite(str_save_name, dst_standard_hough);
+            imwrite(str_save_name, result);
             break;
         }
 
@@ -478,9 +466,12 @@ void Morphology_Operations( int, void* )
  */
 void Canny_Operations( int, void* )
 {
-    Mat dst_2;
     Canny(dst_morphology, dst_canny, threshold1, threshold2, 3);
-    threshold(dst_canny, dst_2, 128, 255, THRESH_BINARY_INV);  //反轉影像，讓邊緣呈現黑線
+    
+    //反轉影像，讓邊緣呈現黑線
+    Mat dst_2;
+    threshold(dst_canny, dst_2, 128, 255, THRESH_BINARY_INV);
+    
     imshow(canny_name, dst_2 );
 }
 
@@ -521,7 +512,7 @@ void Standard_Hough( int, void* )
         else if (delta_y == 0)
             perameter = (Mat_<float>(1, 3) << 0, 1, -(pt1.y));
         else {
-            cout << "delta_x, y:" << delta_x << ", " << delta_y << endl;
+//            cout << "delta_x, y:" << delta_x << ", " << delta_y << endl;
             float slope = (float)delta_y / delta_x;
             perameter = (Mat_<float>(1, 3) << slope, -1, pt1.y-slope*pt1.x);
         }
@@ -530,9 +521,9 @@ void Standard_Hough( int, void* )
     }
     
     /// Print out x
-    for( size_t i = 0; i < s_lines.size(); i++ )
-        cout << function_ab[i] << endl;
-    cout << endl << endl;
+//    for( size_t i = 0; i < s_lines.size(); i++ )
+//        cout << function_ab[i] << endl;
+//    cout << endl << endl;
     
     imshow( standard_name, dst_standard_hough );
 }
@@ -540,7 +531,7 @@ void Standard_Hough( int, void* )
 /**
  * @calibrate img
  */
-void calibrateTransform(Mat* src, Mat* out, vector<Point2f> point) {
+void calibrateTransform(Mat* src, Mat* out, vector<Point2f> point){
     
     int width = 0, height = 0;
     int rotate = 0;
@@ -570,7 +561,7 @@ void calibrateTransform(Mat* src, Mat* out, vector<Point2f> point) {
         pointM = point;
     
     
-    cout << "rotate:" << pointM << endl;
+//    cout << "rotate:" << pointM << endl;
     // Set Transform coords
     vector<Point2f> point_trans(4);
     point_trans[0] = Point2f(0, 0);
@@ -585,5 +576,153 @@ void calibrateTransform(Mat* src, Mat* out, vector<Point2f> point) {
     // Transform
     Size size(width, height); // Set Output size
     warpPerspective(*src, *out, transform, size, INTER_LINEAR, BORDER_CONSTANT);
+    
+}
+
+void findPoint(vector<Point2f> &pt) {
+    pt.clear();
+    
+    for (size_t i = 0; i < function_ab.size(); i++)
+        for (size_t j = i + 1; j < function_ab.size(); j++) {
+            
+            float a1 = function_ab[i].at<float>(0, 0);
+            float b1 = function_ab[i].at<float>(0, 1);
+            float c1 = function_ab[i].at<float>(0, 2);
+            float a2 = function_ab[j].at<float>(0, 0);
+            float b2 = function_ab[j].at<float>(0, 1);
+            float c2 = function_ab[j].at<float>(0, 2);
+            
+            float delta = a1*b2 - a2*b1;
+            float delta_x = (-c1)*b2 - (-c2)*b1;
+            float delta_y = (-c2)*a1 - (-c1)*a2;
+            
+            Point2f _pt(delta_x / delta, delta_y / delta);
+            
+            if (_pt.x < 0 || _pt.x > src.cols ||
+                _pt.y < 0 || _pt.y > src.rows) {
+                //                                printf("......");
+                //                                cout << _pt << endl;
+            }
+            else
+                pt.push_back(_pt);
+        }
+}
+
+
+void findCornerPoint(vector<Point2f> &pt, vector<Point2f> &corners) {
+    
+    Point2f pt0, pt1, pt2, pt3;
+    float min_dist_0 = 0, min_dist_1 = 0, min_dist_2 = 0, min_dist_3 = 0;
+    
+    for (size_t i = 0; i < pt.size(); i++) {
+        
+        Point2f _pt1 = pt[i];
+        
+        /// find pt0
+        float delta_0_x = abs(0 - _pt1.x);
+        float delta_0_y = abs(0 - _pt1.y);
+        float dist_0 = sqrt(pow(delta_0_x, 2) + pow(delta_0_y, 2));
+        
+        if (i == 0 || dist_0 < min_dist_0) {
+            pt0 = _pt1;
+            min_dist_0 = dist_0;
+        }
+        
+        float delta_1_x = abs(src.cols - _pt1.x);
+        float delta_1_y = abs(0 - _pt1.y);
+        float dist_1 = sqrt(pow(delta_1_x, 2) + pow(delta_1_y, 2));
+        
+        if (i == 0 || dist_1 < min_dist_1) {
+            pt1 = _pt1;
+            min_dist_1 = dist_1;
+        }
+        
+        float delta_2_x = abs(0 - _pt1.x);
+        float delta_2_y = abs(src.rows - _pt1.y);
+        float dist_2 = sqrt(pow(delta_2_x, 2) + pow(delta_2_y, 2));
+        
+        if (i == 0 || dist_2 < min_dist_2) {
+            pt2 = _pt1;
+            min_dist_2 = dist_2;
+        }
+        
+        float delta_3_x = abs(src.cols - _pt1.x);
+        float delta_3_y = abs(src.rows - _pt1.y);
+        float dist_3 = sqrt(pow(delta_3_x, 2) + pow(delta_3_y, 2));
+        
+        if (i == 0 || dist_3 < min_dist_3) {
+            pt3 = _pt1;
+            min_dist_3 = dist_3;
+        }
+    }
+    
+    corners.push_back(pt0);
+    corners.push_back(pt1);
+    corners.push_back(pt2);
+    corners.push_back(pt3);
+}
+
+/**
+ * @ Gamma_Correction
+ * Reference: http://www.codepool.biz/image-processing-opencv-gamma-correction.html
+ */
+void GammaCorrection(Mat& _src, Mat& _dst, float fGamma)
+{
+    
+    unsigned char lut[256];
+    
+    for (int i = 0; i < 256; i++)
+        
+    {
+        
+        lut[i] = saturate_cast<uchar>(pow((float)(i / 255.0), fGamma) * 255.0f);
+        
+    }
+    
+    _dst = _src.clone();
+    
+    const int channels = _dst.channels();
+    
+    switch (channels)
+    
+    {
+            
+        case 1:
+            
+        {
+            
+            MatIterator_<uchar> it, end;
+            
+            for (it = _dst.begin<uchar>(), end = _dst.end<uchar>(); it != end; it++)
+                
+                *it = lut[(*it)];
+            
+            break;
+            
+        }
+            
+        case 3:
+            
+        {
+            
+            MatIterator_<Vec3b> it, end;
+            
+            for (it = _dst.begin<Vec3b>(), end = _dst.end<Vec3b>(); it != end; it++)
+                
+            {
+                
+                (*it)[0] = lut[((*it)[0])];
+                
+                (*it)[1] = lut[((*it)[1])];
+                
+                (*it)[2] = lut[((*it)[2])];
+                
+            }
+            
+            break;
+            
+        }
+            
+    }
     
 }
